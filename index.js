@@ -45,6 +45,12 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/user', async (req, res) => {
+      const cursor = userCollection.find();
+      const users = await cursor.toArray();
+      res.send(users);
+    })
+
     app.post('/coffee', async (req, res) => {
       const newCoffee = req.body;
       console.log(newCoffee);
@@ -79,10 +85,17 @@ async function run() {
       res.send(result)
     })
 
-    app.post('/user' , async(req,res) =>{
+    app.delete('/user/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await userCollection.deleteOne(query);
+      res.send(result)
+    })
+
+    app.post('/user', async (req, res) => {
       const user = req.body;
       console.log(user);
-      const result =  await userCollection.insertOne(user)
+      const result = await userCollection.insertOne(user)
       res.send(result);
     })
 
